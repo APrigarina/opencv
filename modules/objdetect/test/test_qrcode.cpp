@@ -14,6 +14,7 @@ std::string qrcode_images_name[] = {
   "version_5_down.jpg", "version_5_left.jpg", "version_5_right.jpg", "version_5_up.jpg", "version_5_top.jpg",
   "russian.jpg", "kanji.jpg", "link_github_ocv.jpg", "link_ocv.jpg", "link_wiki_cv.jpg"
 };
+
 std::string qrcode_images_close[] = {
   "close_1.jpg", "close_2.jpg", "close_3.jpg", "close_4.jpg", "close_5.jpg"
 };
@@ -320,6 +321,8 @@ TEST(Objdetect_QRCode_basic, not_found_qrcode)
     EXPECT_ANY_THROW(qrcode.decode(zero_image, corners, straight_barcode));
 #endif
 }
+
+
 
 #endif // UPDATE_QRCODE_TEST_DATA
 

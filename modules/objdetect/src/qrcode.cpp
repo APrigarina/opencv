@@ -63,7 +63,7 @@ void QRDetect::init(const Mat& src, double eps_vertical_, double eps_horizontal_
     }
     else if (min_side > 512.0)
     {
-        resize_direction = 1; 
+        resize_direction = 1;
         coeff_expansion = min_side / 512.0;
         const int width  = cvRound(src.size().width  / coeff_expansion);
         const int height = cvRound(src.size().height  / coeff_expansion);
