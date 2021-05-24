@@ -25,9 +25,11 @@ TrackerDaSiamRPN::Params::Params()
     model = "dasiamrpn_model.onnx";
     kernel_cls1 = "dasiamrpn_kernel_cls1.onnx";
     kernel_r1 = "dasiamrpn_kernel_r1.onnx";
-    backend = 0; // temporarily by default
+    backend = 0;
     target = 0;
 }
+
+#ifdef HAVE_OPENCV_DNN
 
 template <typename T> static
 T sizeCal(const T& w, const T& h)
@@ -47,15 +49,12 @@ Mat sizeCal(const Mat& w, const Mat& h)
     return sz2;
 }
 
-#ifdef HAVE_OPENCV_DNN
-
 class TrackerDaSiamRPNImpl : public TrackerDaSiamRPN
 {
 public:
     TrackerDaSiamRPNImpl(const TrackerDaSiamRPN::Params& parameters)
         : params(parameters)
     {
-        // Load GOTURN architecture from *.prototxt and pretrained weights from *.caffemodel
 
         siamRPN = dnn::readNet(params.model);
         siamKernelCL1 = dnn::readNet(params.kernel_cls1);
@@ -75,6 +74,7 @@ public:
 
     void init(InputArray image, const Rect& boundingBox) CV_OVERRIDE;
     bool update(InputArray image, Rect& boundingBox) CV_OVERRIDE;
+    int getTrackingScore();
 
     TrackerDaSiamRPN::Params params;
 
@@ -130,6 +130,11 @@ void TrackerDaSiamRPNImpl::init(InputArray image, const Rect& boundingBox)
         float(boundingBox.height)
     );
     trackerInit(image_);
+}
+
+int TrackerDaSiamRPNImpl::getTrackingScore()
+{
+    return trackState.scoreSize;
 }
 
 void TrackerDaSiamRPNImpl::trackerInit(Mat img)
